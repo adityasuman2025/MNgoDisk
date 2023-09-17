@@ -8,7 +8,7 @@
     "build": "tsc && vite build"
   },
   "dependencies": {
-    "react-secure-pdf-viewer-mngo": "^0.0.43"
+    "react-secure-pdf-viewer-mngo": "^0.0.44"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
