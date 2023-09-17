@@ -4,8 +4,13 @@ import resume from './aditya_suman_sde2_iitp_resume.pdf';
 function App() {
     return (
         <>
-            <div className='downloadBtnCont'><a className={"downloadBtn"} href={resume} download target='_blank'>Download</a></div>
             <MNgoSecurePDFViewer
+                securityOptions={{
+                    blockDownload: false,
+                    blockUserSelection: false,
+                    blockPrint: false,
+                    blockRightClick: false,
+                }}
                 pdfUrl={resume}
                 compHeight={"calc(100vh - 42px)"}
             />
@@ -13,4 +18,4 @@ function App() {
     )
 }
 
-export default App
+export default App;
