@@ -1,5 +1,5 @@
 import { MNgoSecurePDFViewer } from 'react-secure-pdf-viewer-mngo';
-import resume from './aditya_suman_sde2_iitp_resume.pdf';
+import resume from './aditya_suman_sde2_iitp.pdf';
 
 function App() {
     return (
