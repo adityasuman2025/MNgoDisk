@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 import LoadingAnimation from "mngo-project-tools/comps/LoadingAnimation";
 
-export default function RenderFile({
+function RenderFile({
     fileUrl
 }: {
     fileUrl?: string
 }) {
+    console.log("fileUrl", fileUrl)
     const [loading, setLoading] = useState(true);
 
     return (
@@ -28,3 +29,5 @@ export default function RenderFile({
         </>
     )
 }
+
+export default memo(RenderFile);
