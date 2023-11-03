@@ -9,7 +9,7 @@ export default function RenderFile({
     const [loading, setLoading] = useState(true);
 
     return (
-        <div className="fileContainer">
+        <>
             {
                 loading &&
                 <div className="loader">
@@ -25,6 +25,6 @@ export default function RenderFile({
                     src={fileUrl} onLoad={() => setLoading(false)}
                 />
             }
-        </div>
+        </>
     )
 }

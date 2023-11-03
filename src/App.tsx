@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import LoadingAnimation from "mngo-project-tools/comps/LoadingAnimation";
 import RenderFile from "./RenderFile";
 import { apiCall, getFilePathToUrlMap } from "./utils";
 
@@ -42,7 +43,15 @@ export default function App() {
         }
     ]);
 
-    return <RouterProvider router={router} />
+    return (
+        <div className="fileContainer">
+            {
+                routes.length ?
+                    <RouterProvider router={router} />
+                    : <LoadingAnimation loading loaderClassName="loaderClassName" />
+            }
+        </div>
+    )
 }
 
 /*
