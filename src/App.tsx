@@ -29,10 +29,29 @@ export default function App() {
     const router = createBrowserRouter([
         ...routes,
         {
-            path: "*",
+            path: "/",
             element: <RenderFile fileUrl={`${FIREBASE_BASE_URL}/aditya_suman_sde2_iitp.pdf?alt=media`} />,
+        },
+        {
+            path: "resume",
+            element: <RenderFile fileUrl={`${FIREBASE_BASE_URL}/aditya_suman_sde2_iitp.pdf?alt=media`} />,
+        },
+        {
+            path: "*",
+            element: <RenderFile />,
         }
     ]);
 
     return <RouterProvider router={router} />
 }
+
+/*
+    vercel.json file needed to be added in the root directory of the project, with the below code, to make the routing work on vercel.
+    {
+       "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+    }
+
+    and for local
+    -s is used with serve to serve the index.html file for all the routes
+    i.e, serve dist -s
+*/

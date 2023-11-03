@@ -13,6 +13,7 @@ export default function RenderFile({
             {
                 loading &&
                 <div className="loader">
+                    {!fileUrl ? <div>File not found</div> : null}
                     <LoadingAnimation loading loaderClassName="loaderClassName" />
                 </div>
             }
