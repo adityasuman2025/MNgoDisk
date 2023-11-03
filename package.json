@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "vite",
-    "build": "tsc && vite build"
+    "build": "tsc && vite build",
+    "serve": "serve dist -s" 
   },
   "dependencies": {
     "mngo-project-tools": "^1.2.5",
