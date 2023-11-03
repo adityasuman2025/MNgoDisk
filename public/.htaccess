@@ -1,4 +1,9 @@
-Options -MultiViews
-    RewriteEngine On
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.html [QSA,L]
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # If the request is not for a file or directory, rewrite to index.html
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.*)$ index.html [L]
+</IfModule>
