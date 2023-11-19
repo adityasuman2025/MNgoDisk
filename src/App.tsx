@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LoadingAnimation from "mngo-project-tools/comps/LoadingAnimation";
+import Routes from "./Routes";
 import RenderFile from "./RenderFile";
 import { apiCall, getFilePathToUrlMap } from "./utils";
 
@@ -9,7 +9,7 @@ const LOCAL_STORAGE_FB_FILES_KEY = "filesJSON";
 const LOCAL_STORAGE_FB_FILES = JSON.parse(localStorage.getItem(LOCAL_STORAGE_FB_FILES_KEY) || "[]");
 
 function getRoutes2(array: any[]): any[] {
-    return array.map(({ path, fileUrl }) => ({ path, element: <RenderFile fileUrl={fileUrl} /> }));
+    return array.map(({ path, fileUrl }) => ({ path, exact: true, element: <RenderFile fileUrl={fileUrl} /> }));
 }
 
 export default function App() {
@@ -19,7 +19,12 @@ export default function App() {
         (async function () {
             try {
                 const items = (await apiCall(FIREBASE_BASE_URL))?.items || [];
-                const firebaseFiles: any[] = getFilePathToUrlMap(items, FIREBASE_BASE_URL);
+                const firebaseFiles: any[] = [
+                    ...getFilePathToUrlMap(items, FIREBASE_BASE_URL),
+                    { path: "/", fileUrl: `${FIREBASE_BASE_URL}/aditya_suman_sde2_iitp.pdf?alt=media` },
+                    { path: "resume", fileUrl: `${FIREBASE_BASE_URL}/aditya_suman_sde2_iitp.pdf?alt=media` },
+                    { path: "*", fileUrl: "" },
+                ];
 
                 setRoutes(getRoutes2(firebaseFiles));
                 localStorage.setItem(LOCAL_STORAGE_FB_FILES_KEY, JSON.stringify(firebaseFiles));
@@ -27,28 +32,11 @@ export default function App() {
         })();
     }, []);
 
-    const router = createBrowserRouter([
-        ...routes,
-        {
-            path: "/",
-            element: <RenderFile fileUrl={`${FIREBASE_BASE_URL}/aditya_suman_sde2_iitp.pdf?alt=media`} />,
-        },
-        {
-            path: "resume",
-            element: <RenderFile fileUrl={`${FIREBASE_BASE_URL}/aditya_suman_sde2_iitp.pdf?alt=media`} />,
-        },
-        {
-            path: "*",
-            element: <RenderFile />,
-        }
-    ]);
-
     return (
         <div className="fileContainer">
             {
-                routes.length ?
-                    <RouterProvider router={router} />
-                    : <LoadingAnimation loading loaderClassName="loaderClassName" />
+                routes.length ? <Routes routes={routes} />
+                    : <LoadingAnimation loading styles={{ loaderClassName: "loaderClassName" }} />
             }
         </div>
     )
