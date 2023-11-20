@@ -6,7 +6,6 @@ function RenderFile({
 }: {
     fileUrl?: string
 }) {
-    console.log("fileUrl", fileUrl)
     const [loading, setLoading] = useState(true);
 
     return (
