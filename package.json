@@ -2,7 +2,7 @@
     "name": "mngo-disk",
     "private": true,
     "version": "0.0.0",
-    "side-effects": false,
+    "sideEffects": false,
     "type": "module",
     "scripts": {
         "start": "vite",
@@ -10,16 +10,16 @@
         "serve": "serve dist -s"
     },
     "dependencies": {
-        "mngo-project-tools": "^1.2.71",
-        "react-router-dom": "^6.18.0"
+        "mngo-project-tools": "1.2.91",
+        "react-router-dom": "6.18.0"
     },
     "devDependencies": {
-        "@types/react": "^18.2.15",
-        "@types/react-dom": "^18.2.7",
-        "@vitejs/plugin-react": "^4.0.4",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "typescript": "^5.0.2",
-        "vite": "^4.4.5"
+        "@types/react": "18.2.15",
+        "@types/react-dom": "18.2.7",
+        "@vitejs/plugin-react": "4.0.4",
+        "react": "18.2.0",
+        "react-dom": "18.2.0",
+        "typescript": "5.0.2",
+        "vite": "4.4.5"
     }
 }

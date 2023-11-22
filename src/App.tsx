@@ -1,10 +1,15 @@
 import { useState, useEffect } from "react";
 import LoadingAnimation from "mngo-project-tools/comps/LoadingAnimation";
+import { sendRequestToAPI } from "mngo-project-tools/utils";
 import Routes from "./Routes";
 import RenderFile from "./RenderFile";
-import { apiCall, getFilePathToUrlMap } from "./utils";
+import { getFilePathToUrlMap } from "./utils";
 
-const FIREBASE_BASE_URL = "https://firebasestorage.googleapis.com/v0/b/documents-b4b54.appspot.com/o";
+const API_BASE_URL = "https://apis.mngo.in"; // 'http://localhost:3000' //
+const API_DISK_HREF = "/api/disk";
+const API_FILE_HREF = "/api/get-file";
+const RESUME_FILE_PATH = "?location=&fileName=aditya_suman_sde2_iitp.pdf&isDocument=true";
+
 const LOCAL_STORAGE_FB_FILES_KEY = "filesJSON";
 const LOCAL_STORAGE_FB_FILES = JSON.parse(localStorage.getItem(LOCAL_STORAGE_FB_FILES_KEY) || "[]");
 
@@ -18,11 +23,13 @@ export default function App() {
     useEffect(() => {
         (async function () {
             try {
-                const items = (await apiCall(FIREBASE_BASE_URL))?.items || [];
+                const items = (await sendRequestToAPI(API_BASE_URL, API_DISK_HREF))?.data || [];
+
+                const apiUrl = API_BASE_URL + API_FILE_HREF;
                 const firebaseFiles: any[] = [
-                    ...getFilePathToUrlMap(items, FIREBASE_BASE_URL),
-                    { path: "/", fileUrl: `${FIREBASE_BASE_URL}/aditya_suman_sde2_iitp.pdf?alt=media` },
-                    { path: "resume", fileUrl: `${FIREBASE_BASE_URL}/aditya_suman_sde2_iitp.pdf?alt=media` },
+                    ...getFilePathToUrlMap(items, apiUrl),
+                    { path: "/", fileUrl: `${apiUrl}${RESUME_FILE_PATH}` },
+                    { path: "resume", fileUrl: `${apiUrl}${RESUME_FILE_PATH}` },
                     { path: "*", fileUrl: "" },
                 ];
 
