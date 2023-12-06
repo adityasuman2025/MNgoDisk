@@ -1,5 +1,5 @@
 import { useState, memo } from "react";
-import LoadingAnimation from "mngo-project-tools/comps/LoadingAnimation";
+import Loader from "mngo-project-tools/comps/Loader";
 
 function RenderFile({
     fileUrl
@@ -14,7 +14,7 @@ function RenderFile({
                 loading &&
                 <div className="loader">
                     {!fileUrl ? <div>File not found</div> : null}
-                    <LoadingAnimation loading styles={{ loaderClassName: "loaderClassName" }} />
+                    <Loader loading styles={{ loaderClassName: "loaderClassName" }} />
                 </div>
             }
 

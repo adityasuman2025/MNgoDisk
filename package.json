@@ -10,7 +10,7 @@
         "serve": "serve dist -s"
     },
     "dependencies": {
-        "mngo-project-tools": "1.2.91",
+        "mngo-project-tools": "1.2.98",
         "react-router-dom": "6.18.0"
     },
     "devDependencies": {

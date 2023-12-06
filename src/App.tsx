@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import LoadingAnimation from "mngo-project-tools/comps/LoadingAnimation";
+import Loader from "mngo-project-tools/comps/Loader";
 import { sendRequestToAPI } from "mngo-project-tools/utils";
 import Routes from "./Routes";
 import RenderFile from "./RenderFile";
@@ -43,7 +43,7 @@ export default function App() {
         <div className="fileContainer">
             {
                 routes.length ? <Routes routes={routes} />
-                    : <LoadingAnimation loading styles={{ loaderClassName: "loaderClassName" }} />
+                    : <Loader loading styles={{ loaderClassName: "loaderClassName" }} />
             }
         </div>
     )
