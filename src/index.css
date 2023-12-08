@@ -30,6 +30,7 @@ body {
 
 .loader {
     position: absolute;
+    z-index: 0;
 }
 
 .loaderClassName {
@@ -43,4 +44,5 @@ body {
     width: 100%;
     height: 100%;
     border: none;
+    z-index: 1;
 }

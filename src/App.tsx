@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Loader from "mngo-project-tools/comps/Loader";
 import { sendRequestToAPI } from "mngo-project-tools/utils";
-import Routes from "./Routes";
+import { getCacheRegular, setCacheRegular } from "mngo-project-tools/cachingUtil";
 import RenderFile from "./RenderFile";
 import { getFilePathToUrlMap } from "./utils";
 
@@ -11,39 +11,63 @@ const API_FILE_HREF = "/api/get-file";
 const RESUME_FILE_PATH = "?location=&fileName=aditya_suman_sde2_iitp.pdf&isDocument=true";
 
 const LOCAL_STORAGE_FB_FILES_KEY = "filesJSON";
-const LOCAL_STORAGE_FB_FILES = JSON.parse(localStorage.getItem(LOCAL_STORAGE_FB_FILES_KEY) || "[]");
+const LOCAL_STORAGE_FB_FILES = getCacheRegular(LOCAL_STORAGE_FB_FILES_KEY);
 
-function getRoutes2(array: any[]): any[] {
-    return array.map(({ path, fileUrl }) => ({ path, exact: true, element: <RenderFile fileUrl={fileUrl} /> }));
-}
+const pathName = (window.location.pathname).substring(1) || "";
 
 export default function App() {
-    const [routes, setRoutes] = useState<any[]>(getRoutes2(LOCAL_STORAGE_FB_FILES));
+    const [files, setFiles] = useState<{ [key: string]: any }>(LOCAL_STORAGE_FB_FILES);
+    const [fileUrl, setFileUrl] = useState("");
 
     useEffect(() => {
+        const fileExists = checkIfFileExists(files);
+
         (async function () {
             try {
                 const items = (await sendRequestToAPI(API_BASE_URL, API_DISK_HREF))?.data || [];
 
                 const apiUrl = API_BASE_URL + API_FILE_HREF;
-                const firebaseFiles: any[] = [
+                const firebaseFiles: { [key: string]: any } = {
                     ...getFilePathToUrlMap(items, apiUrl),
-                    { path: "/", fileUrl: `${apiUrl}${RESUME_FILE_PATH}` },
-                    { path: "resume", fileUrl: `${apiUrl}${RESUME_FILE_PATH}` },
-                    { path: "*", fileUrl: "" },
-                ];
+                    "/": `${apiUrl}${RESUME_FILE_PATH}`, "": `${apiUrl}${RESUME_FILE_PATH}`, "resume": `${apiUrl}${RESUME_FILE_PATH}`,
+                };
 
-                setRoutes(getRoutes2(firebaseFiles));
-                localStorage.setItem(LOCAL_STORAGE_FB_FILES_KEY, JSON.stringify(firebaseFiles));
+                setFiles(firebaseFiles);
+                setCacheRegular(LOCAL_STORAGE_FB_FILES_KEY, firebaseFiles);
+
+                if (!fileExists) checkIfFileExists(firebaseFiles, true);
             } catch { }
         })();
-    }, []);
+    }, [pathName]);
+
+    function checkIfFileExists(files: { [key: string]: any }, isFinalCheck = false) {
+        if (files && Object.keys(files).length) {
+            const filePaths = Object.keys(files);
+
+            if (filePaths.includes(pathName)) {
+                setFileUrl(files[pathName]);
+                return true;
+            } else {
+                if (isFinalCheck) setFileUrl("no");
+            }
+        }
+
+        return false;
+    }
 
     return (
         <div className="fileContainer">
             {
-                routes.length ? <Routes routes={routes} />
-                    : <Loader loading styles={{ loaderClassName: "loaderClassName" }} />
+                (!fileUrl) ? (
+                    <Loader loading styles={{ loaderClassName: "loaderClassName" }} />
+                ) : (fileUrl === "no") ? (
+                    <div className="loader">
+                        <div>File not found</div>
+                        <Loader loading styles={{ loaderClassName: "loaderClassName" }} />
+                    </div>
+                ) : (
+                    <RenderFile fileUrl={fileUrl} />
+                )
             }
         </div>
     )

@@ -9,22 +9,28 @@ export function snakeCase(str: string): string {
 }
 
 export function getFilePathToUrlMap(array: any[], baseUrl: string) {
-    return array.map(name => {
-        /*-------- converting the file name to snakecase with route parent attached ----------*/
-        const fileNamePathArr = name?.split("/") || [];
-        const orgFileName = fileNamePathArr.pop();
-        const orgFileNameArr = orgFileName?.split(".");
-        orgFileNameArr?.pop(); // file extension removed
-        const fileNameWithoutExt = orgFileNameArr?.join("");
-        const snakeCasedFileName = snakeCase(fileNameWithoutExt)
-        const path = fileNamePathArr.reduce((acc: string, item: string) => acc + item.toLowerCase() + "/", "") + snakeCasedFileName;
-        /*-------- converting the file name to snakecase with route parent attached ----------*/
+    return array.reduce((acc, name) => {
+        const { path, fileUrl } = getPathAndFileUrlFromFile(name, baseUrl)
+        acc[path] = fileUrl;
+        return acc;
+    }, {});
+}
 
-        const fileName = encodeURIComponent(orgFileName.trim()); // to replace space, & and other special characters with correct url encoding
-        const location = fileNamePathArr.join("/")
+function getPathAndFileUrlFromFile(name: string, baseUrl: string) {
+    /*-------- converting the file name to snakecase with route parent attached ----------*/
+    const fileNamePathArr = name?.split("/") || [];
+    const orgFileName = fileNamePathArr.pop() || "";
+    const orgFileNameArr = orgFileName?.split(".");
+    orgFileNameArr?.pop(); // file extension removed
+    const fileNameWithoutExt = orgFileNameArr?.join("") || "";
+    const snakeCasedFileName = snakeCase(fileNameWithoutExt)
+    const path = fileNamePathArr.reduce((acc: string, item: string) => acc + item.toLowerCase() + "/", "") + snakeCasedFileName;
+    /*-------- converting the file name to snakecase with route parent attached ----------*/
 
-        const fileUrl = `${baseUrl}?location=${location}&fileName=${fileName}&isDocument=true`;
+    const fileName = encodeURIComponent(orgFileName.trim()); // to replace space, & and other special characters with correct url encoding
+    const location = fileNamePathArr.join("/")
 
-        return { path, fileUrl };
-    });
+    const fileUrl = `${baseUrl}?location=${location}&fileName=${fileName}&isDocument=true`;
+
+    return { path, fileUrl };
 }
