@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import Loader from "mngo-project-tools/comps/Loader";
-import { sendRequestToAPI } from "mngo-project-tools/utils";
-import { getCacheRegular, setCacheRegular } from "mngo-project-tools/cachingUtil";
+import { sendRequestToAPI } from "mngo-project-tools/apiUtils";
+import { getCacheRegular, setCacheRegular } from "mngo-project-tools/cachingUtils";
+import { getDeviceDetails } from "mngo-project-tools/deviceUtils";
 import RenderFile from "./RenderFile";
 import { getFilePathToUrlMap } from "./utils";
 
+const PROJECT_NAME = "MNgo Disk";
 const API_BASE_URL = "https://apis.mngo.in"; // 'http://localhost:3000' //
 const API_DISK_HREF = "/api/disk";
 const API_FILE_HREF = "/api/get-file";
+const API_COUNTER_REF = "/api/counter";
 const RESUME_FILE_PATH = "?location=&fileName=aditya_suman_sde2_iitp.pdf&isDocument=true";
 
 const LOCAL_STORAGE_FB_FILES_KEY = "filesJSON";
@@ -38,6 +41,14 @@ export default function App() {
                 if (!fileExists) checkIfFileExists(firebaseFiles, true);
             } catch { }
         })();
+
+        const deviceDetails = getDeviceDetails();
+        sendRequestToAPI(API_BASE_URL, `${API_COUNTER_REF}`, "POST", {
+            appName: PROJECT_NAME.split(" ").join(""),
+            location: window.location.href,
+            date: new Date().toLocaleString(),
+            device: `${deviceDetails.device} - ${deviceDetails.os} - ${deviceDetails.browser}`,
+        });
     }, [pathName]);
 
     function checkIfFileExists(files: { [key: string]: any }, isFinalCheck = false) {
